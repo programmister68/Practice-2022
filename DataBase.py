@@ -2,7 +2,7 @@ import sqlite3
 
 
 class DataBase:
-    def __init__(self):     # инициалзация
+    def __init__(self):     # инициалзация 
         name = "shop.db"
         self.db = sqlite3.connect(f"{name}")
         cur = self.db.cursor()
