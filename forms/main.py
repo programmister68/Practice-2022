@@ -5,6 +5,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import *
 import logging
 import sys
+
 logging.basicConfig(level=logging.INFO)
 # logging.disable(logging.INFO)
 
@@ -22,6 +23,11 @@ class MainWindow(QMainWindow):
         self.ui.btn_pw.clicked.connect(self.open_eye)
         self.pixmap = QPixmap('res/logo.png')
         self.pic_lbl.setPixmap(self.pixmap)
+        self.ui.btn_ext.clicked.connect(self.Exit)
+
+    def Exit(self):
+        self.close()
+        sys.exit(app.exec_())
 
     def echo(self):
         self.linePword.setEchoMode(QLineEdit.EchoMode.Normal)
