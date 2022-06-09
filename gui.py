@@ -50,7 +50,6 @@ class SellerWindow(QMainWindow):
         self.ui.btn_to_order.clicked.connect(self.order)
         self.ui.btn_exit.clicked.connect(self.exit)
         self.get_employee()
-        self.timer_bar()
 
     def exit(self):
         self.ui = AuthorizationWindow(self)
@@ -67,10 +66,6 @@ class SellerWindow(QMainWindow):
         """
         self.label_name.setText('Валентин Стрыкало')
         self.label_role.setText('Продавец')
-
-    def timer_bar(self):
-
-
 
 
 """
