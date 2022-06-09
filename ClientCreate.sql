@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS Requests (
+ID_Orders INT PRIMARY KEY auto_increment,
+Code_Orders VARCHAR(255) NOT NULL,
+Date_Create VARCHAR(255) NOT NULL,
+Time_Order VARCHAR(255) NOT NULL,
+ID_Client INT NOT NULL,
+Services VARCHAR(255) NOT NULL,
+Status VARCHAR(255) NOT NULL,
+Date_Close VARCHAR(255) NOT NULL,
+Rent_Time VARCHAR(255) NOT NULL,
+FOREIGN KEY (ID_Client) REFERENCES Clients (ID_Client),
+FOREIGN KEY (Services) REFERENCES Services (ID_Services)
+); 
