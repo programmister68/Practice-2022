@@ -17,11 +17,11 @@ class TransitionWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui = AuthorizationWindow(self)
+        self.ui = AuthorizationWindow()
         self.ui.show()
 
     def transit(self):
-        self.ui = SellerWindow(self)
+        self.ui = AdminWindow()
         self.ui.show()
 
     def get_employee(self):
@@ -30,7 +30,7 @@ class TransitionWindow(QMainWindow):
         Данные должны браться из БД.
         """
         self.label_name.setText('Валентин Стрыкало')
-        self.label_role.setText('Продавец')
+        self.label_role.setText('Администратор')
         self.pixmap = QPixmap('res/Федоров.jpeg')
         self.label_avatar.setPixmap(self.pixmap)
 
@@ -52,11 +52,11 @@ class SellerWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui = AuthorizationWindow(self)
+        self.ui = AuthorizationWindow()
         self.ui.show()
 
     def order(self):
-        self.ui = OrderWindow(self)
+        self.ui = OrderWindow()
         self.ui.show()
 
     def get_employee(self):
@@ -66,6 +66,105 @@ class SellerWindow(QMainWindow):
         """
         self.label_name.setText('Валентин Стрыкало')
         self.label_role.setText('Продавец')
+
+
+class SupervisorWindow(QMainWindow):
+    def __init__(self):
+        super(SupervisorWindow, self).__init__()
+        self.ui = uic.loadUi("forms/Supervisor.ui", self)
+        self.window().setWindowTitle("Старший смены")
+        self.setWindowIcon(QIcon('res/logo.ico'))
+        self.ui.btn_to_order.clicked.connect(self.order)
+        self.ui.btn_exit.clicked.connect(self.exit)
+        self.ui.btn_acc_prod.clicked.connect(self.acc_prod)
+        self.get_employee()
+
+    def exit(self):
+        self.ui = AuthorizationWindow()
+        self.ui.show()
+
+    def order(self):
+        self.ui = OrderWindow()
+        self.ui.show()
+
+    def acc_prod(self):
+        self.ui = ProductWindow()
+        self.ui.show()
+
+    def get_employee(self):
+        """
+        Промежуточный вариант.
+        Данные должны браться из БД.
+        """
+        self.label_name.setText('Валентин Стрыкало')
+        self.label_role.setText('Старший смены')
+
+
+class AdminWindow(QMainWindow):
+    def __init__(self):
+        super(AdminWindow, self).__init__()
+        self.ui = uic.loadUi("forms/Admin.ui", self)
+        self.window().setWindowTitle("Администратор")
+        self.setWindowIcon(QIcon('res/logo.ico'))
+        self.ui.btn_mat_data.clicked.connect(self.mat_data)
+        self.ui.btn_exit.clicked.connect(self.exit)
+        self.ui.btn_history.clicked.connect(self.history)
+        self.ui.btn_report.clicked.connect(self.report_order)
+        self.get_employee()
+
+    def exit(self):
+        self.ui = AuthorizationWindow()
+        self.ui.show()
+
+    def mat_data(self):
+        self.ui = MaterialDataWindow()
+        self.ui.show()
+
+    def history(self):
+        self.ui = EntranceHistoryWindow()
+        self.ui.show()
+
+    def report_order(self):
+        self.ui = ReportWindow()
+        self.ui.show()
+
+    def get_employee(self):
+        """
+        Промежуточный вариант.
+        Данные должны браться из БД.
+        """
+        self.label_name.setText('Валентин Стрыкало')
+        self.label_role.setText('Администратор')
+
+
+class ProductWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        pass
+
+
+class MaterialDataWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        pass
+
+
+class ReportWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        pass
+
+
+class EntranceHistoryWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        pass
+
+
+class OrderWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        pass
 
 
 """
@@ -82,6 +181,6 @@ class Builder:
 """
 app = QApplication(sys.argv)
 if __name__ == "__main__":
-    mwin = SellerWindow()
+    mwin = TransitionWindow()
     mwin.show()
     sys.exit(app.exec_())
