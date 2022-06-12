@@ -4,23 +4,88 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidge
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.Qt import *
 import sys
+from DataBase import Database
 
 
-class TransitionWindow(QMainWindow):
+class TransitionToSellerWindow(QMainWindow):
     def __init__(self):
-        super(TransitionWindow, self).__init__()
+        super(TransitionToSellerWindow, self).__init__()
         self.ui = uic.loadUi("forms/Transition.ui", self)
-        self.setWindowTitle("Эм, а как назвать-то?")
+        self.setWindowTitle("Инфо")
         self.setWindowIcon(QIcon('res/logo.ico'))
         self.ui.btn_transit.clicked.connect(self.transit)
         self.ui.btn_exit.clicked.connect(self.exit)
         self.get_employee()
 
     def exit(self):
-        self.ui = AuthorizationWindow()
+        self.ui.close()
+        self.ui = AuthWindow()
         self.ui.show()
 
     def transit(self):
+        self.ui.close()
+        self.ui = SellerWindow()
+        self.ui.show()
+
+    def get_employee(self):
+        """
+        Промежуточный вариант.
+        Данные должны браться из БД.
+        """
+        self.label_name.setText('Валентин Стрыкало')
+        self.label_role.setText('Продавец')
+        self.pixmap = QPixmap('res/Федоров.jpeg')
+        self.label_avatar.setPixmap(self.pixmap)
+
+
+class TransitionToSupervisiorWindow(QMainWindow):
+    def __init__(self):
+        super(TransitionToSupervisiorWindow, self).__init__()
+        self.ui = uic.loadUi("forms/Transition.ui", self)
+        self.setWindowTitle("Инфо")
+        self.setWindowIcon(QIcon('res/logo.ico'))
+        self.ui.btn_transit.clicked.connect(self.transit)
+        self.ui.btn_exit.clicked.connect(self.exit)
+        self.get_employee()
+
+    def exit(self):
+        self.ui.close()
+        self.ui = AuthWindow()
+        self.ui.show()
+
+    def transit(self):
+        self.ui.close()
+        self.ui = SupervisorWindow()
+        self.ui.show()
+
+    def get_employee(self):
+        """
+        Промежуточный вариант.
+        Данные должны браться из БД.
+        """
+        self.label_name.setText('Валентин Стрыкало')
+        self.label_role.setText('Старший смены')
+        self.pixmap = QPixmap('res/Федоров.jpeg')
+        self.label_avatar.setPixmap(self.pixmap)
+
+
+class TransitionToAdminWindow(QMainWindow):
+    def __init__(self):
+        super(TransitionToAdminWindow, self).__init__()
+        self.ui = uic.loadUi("forms/Transition.ui", self)
+        self.setWindowTitle("Инфо")
+        self.setWindowIcon(QIcon('res/logo.ico'))
+        self.ui.btn_transit.clicked.connect(self.transit)
+        self.ui.btn_exit.clicked.connect(self.exit)
+        self.get_employee()
+
+    def exit(self):
+        self.ui.close()
+        self.ui = AuthWindow()
+        self.ui.show()
+
+    def transit(self):
+        self.ui.close()
         self.ui = AdminWindow()
         self.ui.show()
 
@@ -35,9 +100,9 @@ class TransitionWindow(QMainWindow):
         self.label_avatar.setPixmap(self.pixmap)
 
 
-class AuthorizationWindow(QMainWindow):
+class AuthWindow(QMainWindow):
     def __init__(self):
-        super(AuthorizationWindow, self).__init__()
+        super(AuthWindow, self).__init__()
         self.ui = uic.loadUi("forms/Authorization.ui", self)
 
 
@@ -52,7 +117,8 @@ class SellerWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui = AuthorizationWindow()
+        self.ui.close()
+        self.ui = AuthWindow()
         self.ui.show()
 
     def order(self):
@@ -80,7 +146,8 @@ class SupervisorWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui = AuthorizationWindow()
+        self.ui.close()
+        self.ui = AuthWindow()
         self.ui.show()
 
     def order(self):
@@ -113,7 +180,8 @@ class AdminWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui = AuthorizationWindow()
+        self.ui.close()
+        self.ui = AuthWindow()
         self.ui.show()
 
     def mat_data(self):
