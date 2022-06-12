@@ -1,10 +1,17 @@
+import sys
+import logging
+from random import *
+from string import ascii_letters
+
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem, QMessageBox
+from PyQt5.QtCore import Qt, pyqtSlot, QSize
+from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem, QMessageBox,  QLineEdit, QGraphicsScene, QHBoxLayout
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.Qt import *
-import sys
-from DataBase import Database
+# from DataBase import Database
+
+logging.basicConfig(level=logging.INFO)
+# logging.disable(logging.INFO)
 
 
 class TransitionToSellerWindow(QMainWindow):
@@ -18,7 +25,7 @@ class TransitionToSellerWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui.close()
+        self.close()
         self.ui = AuthWindow()
         self.ui.show()
 
@@ -38,9 +45,9 @@ class TransitionToSellerWindow(QMainWindow):
         self.label_avatar.setPixmap(self.pixmap)
 
 
-class TransitionToSupervisiorWindow(QMainWindow):
+class TransitionToSupervisorWindow(QMainWindow):
     def __init__(self):
-        super(TransitionToSupervisiorWindow, self).__init__()
+        super(TransitionToSupervisorWindow, self).__init__()
         self.ui = uic.loadUi("forms/Transition.ui", self)
         self.setWindowTitle("Инфо")
         self.setWindowIcon(QIcon('res/logo.ico'))
@@ -49,7 +56,7 @@ class TransitionToSupervisiorWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui.close()
+        self.close()
         self.ui = AuthWindow()
         self.ui.show()
 
@@ -80,7 +87,7 @@ class TransitionToAdminWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui.close()
+        self.close()
         self.ui = AuthWindow()
         self.ui.show()
 
@@ -101,9 +108,73 @@ class TransitionToAdminWindow(QMainWindow):
 
 
 class AuthWindow(QMainWindow):
-    def __init__(self):
-        super(AuthWindow, self).__init__()
-        self.ui = uic.loadUi("forms/Authorization.ui", self)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ui = uic.loadUi("forms/auth.ui", self)
+        self.setWindowIcon(QIcon('res/logo.ico'))
+        self.setWindowTitle('Авторизация')
+        self.btn_pw.setIcon(QIcon('res/eye.png'))
+        self.btn_pw.setIconSize(QSize(16, 16))
+        self.btn_reroll.setIcon(QIcon('res/Change.ico'))
+        self.btn_reroll.setIconSize(QSize(16, 16))
+        self.ui.btn_pw.clicked.connect(self.echo)
+        self.pixmap = QPixmap('res/logo.png')
+        self.pic_lbl.setPixmap(self.pixmap)
+        self.scene = QGraphicsScene(0, 0, 300, 40)
+        self.ui.cap_viev.setScene(self.scene)
+        self.ui.btn_pw.clicked.connect(self.vis_pas)
+
+        self.ui.btn_ext.clicked.connect(self.exit)
+        self.visible_captcha(False)
+        self.ui.enter_btn.clicked.connect(self.enter)
+        self.ui.enter_btn.clicked.connect(self.counter_test)
+
+        self.count_try_entry = 0
+        self.now_captcha = None
+
+    def enter(self):
+        self.ui.close()
+        self.ui = TransitionToAdminWindow()
+        self.ui.show()
+
+    def vis_pas(self):
+        ed = self.ui.linePword
+        if self.vis_pas:
+            self.vis_pas = False
+            ed.setEchoMode(QtWidgets.QLineEdit.Normal)
+        else:
+            self.vis_pas = True
+            ed.setEchoMode(QtWidgets.QLineEdit.Password)
+
+    def counter_test(self):
+        self.count_try_entry +=1
+
+        if self.count_try_entry == 2:
+            self.visible_captcha(True)
+
+    def auth(self):
+        self.counter += 1
+        if self.counter == 3:
+            self.ui.cap_view.addWidget(self.captha_line)
+            self.ui.cap_view.addWidget(self.captha_widget)
+        elif self.counter < 3:
+            self.ui.captha_layout = QHBoxLayout()
+        elif self.counter > 8:
+            self.ui.captha_layout.deleteLater()
+
+    def exit(self):
+        self.close()
+        sys.exit(app.exec_())
+
+    def echo(self):
+        self.linePword.setEchoMode(QLineEdit.EchoMode.Normal)
+
+    def visible_captcha(self, visible=True):
+        self.ui.cap_viev.setVisible(visible)
+        self.ui.cap_edit.setVisible(visible)
+        self.ui.capt.setVisible(visible)
+        self.ui.btn_reroll.setVisible(visible)
+        self.scene.addText(f"CAPTCHA TEST")
 
 
 class SellerWindow(QMainWindow):
@@ -117,7 +188,7 @@ class SellerWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui.close()
+        self.close()
         self.ui = AuthWindow()
         self.ui.show()
 
@@ -146,7 +217,7 @@ class SupervisorWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui.close()
+        self.close()
         self.ui = AuthWindow()
         self.ui.show()
 
@@ -180,7 +251,7 @@ class AdminWindow(QMainWindow):
         self.get_employee()
 
     def exit(self):
-        self.ui.close()
+        self.close()
         self.ui = AuthWindow()
         self.ui.show()
 
@@ -205,34 +276,64 @@ class AdminWindow(QMainWindow):
         self.label_role.setText('Администратор')
 
 
-class ProductWindow(QMainWindow):
+'''
+Класс Модальных Окон
+'''
+
+
+class ProductWindow(QtWidgets.QWidget):
     def __init__(self):
-        super().__init__()
-        pass
+        super(ProductWindow, self).__init__()
+        self.ui = uic.loadUi("forms/ProductWindow.ui", self)
+        self.window().setWindowTitle("Принять товар")
+        self.btn_exit.clicked.connect(self.exit)
+
+    def exit(self):
+        self.ui.close()
 
 
-class MaterialDataWindow(QMainWindow):
+class MaterialDataWindow(QtWidgets.QWidget):
     def __init__(self):
-        super().__init__()
-        pass
+        super(MaterialDataWindow, self).__init__()
+        self.ui = uic.loadUi("forms/MaterialDataWindow.ui", self)
+        self.window().setWindowTitle("Данные о расходных материалах")
+        self.btn_exit.clicked.connect(self.exit)
+
+    def exit(self):
+        self.ui.close()
 
 
-class ReportWindow(QMainWindow):
+class ReportWindow(QtWidgets.QWidget):
     def __init__(self):
-        super().__init__()
-        pass
+        super(ReportWindow, self).__init__()
+        self.ui = uic.loadUi("forms/ReportWindow.ui", self)
+        self.window().setWindowTitle("Сформировать отчёт")
+        self.btn_exit.clicked.connect(self.exit)
+
+    def exit(self):
+        self.ui.close()
 
 
-class EntranceHistoryWindow(QMainWindow):
+class EntranceHistoryWindow(QtWidgets.QWidget):
     def __init__(self):
-        super().__init__()
-        pass
+        super(EntranceHistoryWindow, self).__init__()
+        self.ui = uic.loadUi("forms/EntranceHistoryWindow.ui", self)
+        self.window().setWindowTitle("История входов")
+        self.btn_exit.clicked.connect(self.exit)
+
+    def exit(self):
+        self.ui.close()
 
 
-class OrderWindow(QMainWindow):
+class OrderWindow(QtWidgets.QWidget):
     def __init__(self):
-        super().__init__()
-        pass
+        super(OrderWindow, self).__init__()
+        self.ui = uic.loadUi("forms/OrderWindow.ui", self)
+        self.window().setWindowTitle("Сформировать заказ")
+        self.btn_exit.clicked.connect(self.exit)
+
+    def exit(self):
+        self.ui.close()
 
 
 """
@@ -247,8 +348,9 @@ class Builder:
 """
 Пока главным окном формируется транзитное
 """
-app = QApplication(sys.argv)
+
 if __name__ == "__main__":
-    mwin = TransitionWindow()
-    mwin.show()
+    app = QtWidgets.QApplication(sys.argv)
+    window = AuthWindow()
+    window.show()
     sys.exit(app.exec_())
