@@ -522,7 +522,7 @@
          </widget>
         </item>
         <item alignment="Qt::AlignRight">
-         <widget class="QLineEdit" name="lineEdit_2">
+         <widget class="QLineEdit" name="linelgn">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1061,7 +1061,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="capt">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -1080,7 +1080,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_3">
+         <widget class="QLineEdit" name="cap_edit">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -1551,7 +1551,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QGraphicsView" name="graphicsView">
+       <widget class="QGraphicsView" name="cap_viev">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -1584,7 +1584,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="enter_btn">
           <property name="font">
            <font>
             <family>Comic Sans MS</family>
