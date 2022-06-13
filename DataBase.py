@@ -1,44 +1,121 @@
-import sqlite3
+import pymysql
+
+class Database:
+    def __init__(self):
+        self.connection = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='root',
+            password='admin',
+            database='database',
+        )
+
+    def getCLient(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM CLIENTS")
+        clients = cursor.fetchall()
+        for i in clients:
+            print(i)
+        return clients
+
+    def getOrders(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM REQUESTS")
+        requests = cursor.fetchall()
+        for i in requests:
+            print(i)
+        return requests
+
+    def getEmployee(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM EMPLOYEERS")
+        employeers = cursor.fetchall()
+        for i in employeers:
+            print(i)
+        return employeers
+
+    def getService(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM SERVICES")
+        services = cursor.fetchall()
+        for i in services:
+            print(i)
+        return services
+
+    def getHistory(self):
+        cursor = self.connection.cursor()
+        cursor.exectue("SELECT * FROM EntryHistory")
+        history = cursor.fetchall()
+        for i in history:
+            print(i)
+        return history
+
+    def ClientImport(self, FIO, ID_client, Passport, Datebirth, Addres, Email, Password):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"INSERT INTO client "
+            f"(`FIO`,`ID_client`,`Passport`,`Datebirth`,`Addres`,`Email`,`Password`) "
+            f"VALUES ('{FIO}','{ID_client}', '{Passport}', '{Datebirth}', '{Addres}', '{Email}', '{Password}')")
+        cursor.close()
+        self.connection.commit()
+
+    def EmployeeImport(self, ID_Employee, Post, FIO_Employee, Login_Employee, Password_Employee, Last_Login, Status_Login):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"INSERT INTO employee"
+            f"(`ID_Employee`, `Post`, `FIO_Employee`, `Login_Employee`, `Password_Employee`, `Last_Login`, `Status_Login`) "
+            f"VALUES ('{ID_Employee}', '{Post}', '{FIO_Employee}', '{Login_Employee}', '{Password_Employee}', '{Last_Login}', '{Status_Login}' )")
+        cursor.close()
+        self.connection.commit()
+
+    def ServiceImport(self, ID_Services, Name_Services, Code_Services, Price_Hour):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"INSERT INTO service"
+            f"(`ID_Services`, `Name_Services`, `Code_Services`, `Price_Hour`)"
+            f"VALUES ('{ID_Services}', '{Name_Services}', '{Code_Services}', '{Price_Hour}')" )
+        cursor.close()
+        self.connection.commit()
+
+    def OrdersImport(self, ID_Orders, Code_Orders, Date_Create, Time_Order, ID_Client, Services, Status, Rent_Time):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            f"INSERT INTO Orders"
+            f"(`ID_Orders`, `Code_Orders`, `Date_Create`, `Time_Order`, `ID_Client`, `Services`, `Status`, `Rent_Time`)"
+            f"VALUES ('{ID_Orders}', '{Code_Orders}', '{Date_Create}', '{Time_Order}', '{ID_Client}', '{Services}', '{Status}', '{Rent_Time}')"
+        )
+        cursor.close()
+        self.connection.commit()
 
 
-class DataBase:
-    def __init__(self):     # инициалзация 
-        name = "shop.db"
-        self.db = sqlite3.connect(f"{name}")
-        cur = self.db.cursor()
-        cur.execute("""CREATE TABLE IF NOT EXISTS Shop (
-            id integer primary key,
-            name TEXT,
-            address TEXT,
-            country TEXT
-            )
-        """)
+    def DeleteClient(self):
+        cursor = self.connection.cursor()
+        cursor.execute("DROP TABLE clients")
+        cursor.close()
+        self.connection.commit()
 
-        self.db.commit()
-        cur.close()
+    def DeleteOrders(self):
+        cursor = self.connection.cursor()
+        cursor.execute("DROP TABLE requests")
+        cursor.close()
+        self.connection.commit()
 
-    def get_from_shop(self):    # чтение данных из БД
-        cur = self.db.cursor()
-        cur.execute("""SELECT * FROM Shop""")
-        records = cur.fetchall()
-        cur.close()
-        return records
+    def DeleteService(self):
+        cursor = self.connection.cursor()
+        cursor.execute("DROP TABLE services")
+        cursor.close()
+        self.connection.commit()
 
-    def update_shop(self, id, name, address, country):   # обновление данных
-        id = int(id)
-        cur = self.db.cursor()
-        cur.execute(f""" UPDATE Shop set name="{name}", address="{address}", country="{country}" WHERE id={id}""")
-        self.db.commit()
-        cur.close()
+    def DeleteEmployee(self):
+        cursor = self.connection.cursor()
+        cursor.execute("DROP TABLE employeers")
+        cursor.close()
+        self.connection.commit()
 
-    def delete_from_shop(self, id):     # удаление данных
-        cur = self.db.cursor()
-        cur.execute(f"""DELETE from Shop WHERE id={id}""")
-        self.db.commit()
-        cur.close()
-
-    def add_in_shop(self, name, address, country):      # добавление данных
-        cur = self.db.cursor()
-        cur.execute("INSERT INTO Shop VALUES (NULL, ?, ?, ?)", (name, address, country))
-        self.db.commit()
-        cur.close()
+if __name__ == '__main__':
+    D = Database()
+    print("All client")
+    print("___________________________________________________________________________________________________________")
+    D.getCLient()
+    print("---------------------------------------------------------------------------------")
+    D.insertService("")
