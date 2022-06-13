@@ -1,14 +1,10 @@
 import sys
 import logging
-from random import *
-from string import ascii_letters
+from random import randint
 
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSlot, QSize
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem, QMessageBox,  QLineEdit, QGraphicsScene, QHBoxLayout
-from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.Qt import *
-# from DataBase import Database
+
 
 logging.basicConfig(level=logging.INFO)
 # logging.disable(logging.INFO)
@@ -35,13 +31,9 @@ class TransitionToSellerWindow(QMainWindow):
         self.ui.show()
 
     def get_employee(self):
-        """
-        Промежуточный вариант.
-        Данные должны браться из БД.
-        """
-        self.label_name.setText('Валентин Стрыкало')
+        self.label_name.setText('Смирнова Ульяна Гордеевна')
         self.label_role.setText('Продавец')
-        self.pixmap = QPixmap('res/Федоров.jpeg')
+        self.pixmap = QPixmap('res/Смирнова.jpeg')
         self.label_avatar.setPixmap(self.pixmap)
 
 
@@ -66,13 +58,9 @@ class TransitionToSupervisorWindow(QMainWindow):
         self.ui.show()
 
     def get_employee(self):
-        """
-        Промежуточный вариант.
-        Данные должны браться из БД.
-        """
-        self.label_name.setText('Валентин Стрыкало')
+        self.label_name.setText('Игнатов Кассиан Васильевич')
         self.label_role.setText('Старший смены')
-        self.pixmap = QPixmap('res/Федоров.jpeg')
+        self.pixmap = QPixmap('res/Игнатов.jpg')
         self.label_avatar.setPixmap(self.pixmap)
 
 
@@ -97,11 +85,7 @@ class TransitionToAdminWindow(QMainWindow):
         self.ui.show()
 
     def get_employee(self):
-        """
-        Промежуточный вариант.
-        Данные должны браться из БД.
-        """
-        self.label_name.setText('Валентин Стрыкало')
+        self.label_name.setText('Федоров Федор Федорович')
         self.label_role.setText('Администратор')
         self.pixmap = QPixmap('res/Федоров.jpeg')
         self.label_avatar.setPixmap(self.pixmap)
@@ -133,9 +117,20 @@ class AuthWindow(QMainWindow):
         self.now_captcha = None
 
     def enter(self):
-        self.ui.close()
-        self.ui = TransitionToAdminWindow()
-        self.ui.show()
+        if self.ui.linelgn.text() == '1':
+            rand_num = randint(0, 2)
+            if rand_num == 0:
+                self.ui.close()
+                self.ui = TransitionToAdminWindow()
+                self.ui.show()
+            elif rand_num == 1:
+                self.ui.close()
+                self.ui = TransitionToSellerWindow()
+                self.ui.show()
+            else:
+                self.ui.close()
+                self.ui = TransitionToSupervisorWindow()
+                self.ui.show()
 
     def vis_pas(self):
         ed = self.ui.linePword
@@ -197,11 +192,7 @@ class SellerWindow(QMainWindow):
         self.ui.show()
 
     def get_employee(self):
-        """
-        Промежуточный вариант.
-        Данные должны браться из БД.
-        """
-        self.label_name.setText('Валентин Стрыкало')
+        self.label_name.setText('Смирнова Ульяна Гордеевна')
         self.label_role.setText('Продавец')
 
 
@@ -230,11 +221,7 @@ class SupervisorWindow(QMainWindow):
         self.ui.show()
 
     def get_employee(self):
-        """
-        Промежуточный вариант.
-        Данные должны браться из БД.
-        """
-        self.label_name.setText('Валентин Стрыкало')
+        self.label_name.setText('Игнатов Кассиан Васильевич')
         self.label_role.setText('Старший смены')
 
 
@@ -268,17 +255,8 @@ class AdminWindow(QMainWindow):
         self.ui.show()
 
     def get_employee(self):
-        """
-        Промежуточный вариант.
-        Данные должны браться из БД.
-        """
-        self.label_name.setText('Валентин Стрыкало')
+        self.label_name.setText('Федоров Федор Федорович')
         self.label_role.setText('Администратор')
-
-
-'''
-Класс Модальных Окон
-'''
 
 
 class ProductWindow(QtWidgets.QWidget):
@@ -287,6 +265,7 @@ class ProductWindow(QtWidgets.QWidget):
         self.ui = uic.loadUi("forms/ProductWindow.ui", self)
         self.window().setWindowTitle("Принять товар")
         self.btn_exit.clicked.connect(self.exit)
+        self.setWindowIcon(QIcon('res/logo.ico'))
 
     def exit(self):
         self.ui.close()
@@ -298,6 +277,7 @@ class MaterialDataWindow(QtWidgets.QWidget):
         self.ui = uic.loadUi("forms/MaterialDataWindow.ui", self)
         self.window().setWindowTitle("Данные о расходных материалах")
         self.btn_exit.clicked.connect(self.exit)
+        self.setWindowIcon(QIcon('res/logo.ico'))
 
     def exit(self):
         self.ui.close()
@@ -309,6 +289,7 @@ class ReportWindow(QtWidgets.QWidget):
         self.ui = uic.loadUi("forms/ReportWindow.ui", self)
         self.window().setWindowTitle("Сформировать отчёт")
         self.btn_exit.clicked.connect(self.exit)
+        self.setWindowIcon(QIcon('res/logo.ico'))
 
     def exit(self):
         self.ui.close()
@@ -320,6 +301,7 @@ class EntranceHistoryWindow(QtWidgets.QWidget):
         self.ui = uic.loadUi("forms/EntranceHistoryWindow.ui", self)
         self.window().setWindowTitle("История входов")
         self.btn_exit.clicked.connect(self.exit)
+        self.setWindowIcon(QIcon('res/logo.ico'))
 
     def exit(self):
         self.ui.close()
@@ -331,23 +313,11 @@ class OrderWindow(QtWidgets.QWidget):
         self.ui = uic.loadUi("forms/OrderWindow.ui", self)
         self.window().setWindowTitle("Сформировать заказ")
         self.btn_exit.clicked.connect(self.exit)
+        self.setWindowIcon(QIcon('res/logo.ico'))
 
     def exit(self):
         self.ui.close()
 
-
-"""
-class Builder:
-    def __init__(self):
-        self.gui = None
-
-    def create_gui(self):
-        self.gui = TransitionWindow(self)
-"""
-
-"""
-Пока главным окном формируется транзитное
-"""
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
